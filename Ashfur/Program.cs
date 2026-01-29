@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
-using NetCord.Hosting.Services.Commands;
+using osu.NET;
+using osu.NET.Authorization;
 
 namespace Ashfur;
 
@@ -22,7 +24,8 @@ internal class Program {
                 };
             })
             .AddGatewayHandlers(typeof(Program).Assembly)
-            .AddApplicationCommands();
+            .AddApplicationCommands()
+            .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["Osu:ClientId"], builder.Configuration[ "Osu:ClientSecret"]));
 
         var host = builder.Build();
 
