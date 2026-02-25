@@ -22,8 +22,7 @@ public class OsuModule(OsuApiClient osuApiClient) : ApplicationCommandModule<App
         // this looks and feels unsightly.
         try {
             result = await osuApiClient.GetUserAsync(player, Ruleset.Osu);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log($"Could not fetch osu! data. {e}", LogType.Exception);
             await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties {
                 Components = [ComponentUtils.BuildExceptionComponent("Could not fetch Osu data!", e)]
@@ -40,6 +39,9 @@ public class OsuModule(OsuApiClient osuApiClient) : ApplicationCommandModule<App
                     new TextDisplayProperties($"# {result.Value.Username}")
                 ]),
                 new ComponentSeparatorProperties().WithDivider(),
+                new TextDisplayProperties($"County: {result.Value.Country.Name} [{result.Value.Country.Code}]"),
+                new TextDisplayProperties($"Team: [{result.Value.Team.Name}](https://osu.ppy.sh/teams/{result.Value.Team.Id})"),
+                // new TextDisplayProperties($"Level: {}")
             ]);
 
         await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties() {

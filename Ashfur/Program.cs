@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
@@ -25,7 +24,8 @@ internal class Program {
             })
             .AddGatewayHandlers(typeof(Program).Assembly)
             .AddApplicationCommands()
-            .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["Osu:ClientId"], builder.Configuration[ "Osu:ClientSecret"]));
+            .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["Osu:ClientId"],
+                builder.Configuration["Osu:ClientSecret"]));
 
         var host = builder.Build();
 
