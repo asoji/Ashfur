@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
@@ -26,6 +28,13 @@ internal class Program {
             .AddApplicationCommands()
             .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["Osu:ClientId"],
                 builder.Configuration["Osu:ClientSecret"]));
+
+        builder.Logging.AddSimpleConsole(options => {
+            options.SingleLine = false;
+            options.TimestampFormat = "[HH:mm:ss] ";
+            options.ColorBehavior = LoggerColorBehavior.Enabled;
+            options.UseUtcTimestamp = false;
+        });
 
         var host = builder.Build();
 
