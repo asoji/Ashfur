@@ -17,11 +17,16 @@ namespace Ashfur;
 
 internal class Program {
     static async Task Main(string[] args) {
+        String serilogOutputTemplate = "[{Timestamp:HH:mm:ss}] [{Level:u3}] [{AssemblyName}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+        
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .Enrich.FromLogContext()
-            .WriteTo.Console()
-            .WriteTo.File(new CompactJsonFormatter(), "logs/log.json", LogEventLevel.Verbose, rollingInterval: RollingInterval.Day)
+            .Enrich.WithAssemblyName()
+            .Enrich.WithAssemblyVersion()
+            .Enrich.WithClassName()
+            .WriteTo.Console(outputTemplate: serilogOutputTemplate)
+            .WriteTo.File(new CompactJsonFormatter(), $"logs/log-{DateTime.Now:yyyyMMddHHmmss}.json", LogEventLevel.Verbose)
             .CreateLogger();
         
         var builder = Host.CreateApplicationBuilder(args);
