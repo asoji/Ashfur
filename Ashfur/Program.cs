@@ -26,7 +26,7 @@ internal class Program {
             .Enrich.WithAssemblyVersion()
             .Enrich.WithClassName()
             .WriteTo.Console(outputTemplate: serilogOutputTemplate)
-            .WriteTo.File(new CompactJsonFormatter(), $"logs/log-{DateTime.Now:yyyyMMddHHmmss}.json", LogEventLevel.Verbose)
+            .WriteTo.Async(a => a.File(new CompactJsonFormatter(), $"logs/log-{DateTime.Now:yyyyMMddHHmmss}.json", LogEventLevel.Verbose))
             .CreateLogger();
         
         var builder = Host.CreateApplicationBuilder(args);
