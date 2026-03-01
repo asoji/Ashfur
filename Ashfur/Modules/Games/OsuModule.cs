@@ -1,4 +1,5 @@
 ﻿using Ashfur.Utils;
+using JetBrains.Annotations;
 using NetCord;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
@@ -10,6 +11,7 @@ using static PrettyLogSharp.PrettyLogger;
 
 namespace Ashfur.Modules.Games;
 
+[UsedImplicitly]
 [SlashCommand("osu", "Osu [lazer] player stats")]
 public class OsuModule(OsuApiClient osuApiClient) : ApplicationCommandModule<ApplicationCommandContext> {
     [SubSlashCommand("standard", "View information about an osu! player on Standard mode")]

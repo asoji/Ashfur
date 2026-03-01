@@ -1,12 +1,14 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using Ashfur.Utils;
+using JetBrains.Annotations;
 using NetCord;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
 
 namespace Ashfur.Modules;
 
+[UsedImplicitly]
 public class BasicsModule : ApplicationCommandModule<ApplicationCommandContext> {
     [SlashCommand("about", "About Ashfur")]
     public async Task About() {

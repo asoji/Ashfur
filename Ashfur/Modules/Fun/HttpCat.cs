@@ -1,9 +1,11 @@
-﻿using NetCord;
+﻿using JetBrains.Annotations;
+using NetCord;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
 
 namespace Ashfur.Modules.Fun;
 
+[UsedImplicitly]
 public class HttpCat : ApplicationCommandModule<ApplicationCommandContext>  {
     [SlashCommand("httpcat", "HTTP Codes but Cats!")]
     public async Task HttpCatTime(
