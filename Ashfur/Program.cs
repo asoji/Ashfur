@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using JetBrains.Annotations;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using NetCord;
@@ -8,14 +9,25 @@ using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
 using osu.NET;
 using osu.NET.Authorization;
+using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
 
 namespace Ashfur;
 
 internal class Program {
     static async Task Main(string[] args) {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Verbose()
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .WriteTo.File(new CompactJsonFormatter(), "logs/log.json", LogEventLevel.Verbose, rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+        
         var builder = Host.CreateApplicationBuilder(args);
 
         builder.Services
+            .AddSerilog()
             .AddDiscordGateway(options => {
                 options.Intents = GatewayIntents.Guilds | GatewayIntents.GuildMessages | GatewayIntents.MessageContent;
                 options.Presence = new PresenceProperties(UserStatusType.DoNotDisturb) {
@@ -28,13 +40,6 @@ internal class Program {
             .AddApplicationCommands()
             .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["Osu:ClientId"],
                 builder.Configuration["Osu:ClientSecret"]));
-
-        builder.Logging.AddSimpleConsole(options => {
-            options.SingleLine = false;
-            options.TimestampFormat = "[HH:mm:ss] ";
-            options.ColorBehavior = LoggerColorBehavior.Enabled;
-            options.UseUtcTimestamp = false;
-        });
 
         var host = builder.Build();
 
