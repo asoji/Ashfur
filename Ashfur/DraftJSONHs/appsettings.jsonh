@@ -1,0 +1,11 @@
+﻿unnecessary_prefix_that_netcord_uses: af!
+    
+tokens: {
+    bot: aaaaa
+    osu: aaaaa
+}
+
+custom_status: {
+    status: UserActivityType.Competing
+    text: gay stuff 🏳️‍🌈
+}

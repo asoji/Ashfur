@@ -5,4 +5,4 @@ tokens {
     osu "aaaaa"
 }
 
-custom-status "gay stuff 🏳️‍🌈"
+custom-status (enum)UserActivityType.Competing "gay stuff 🏳️‍🌈"

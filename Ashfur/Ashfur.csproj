@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
+        <PackageReference Include="JsonhCs" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2"/>
         <PackageReference Include="NetCord" Version="1.0.0-alpha.468"/>
         <PackageReference Include="NetCord.Hosting" Version="1.0.0-alpha.468"/>
