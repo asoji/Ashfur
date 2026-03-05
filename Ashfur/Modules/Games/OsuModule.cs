@@ -6,8 +6,7 @@ using NetCord.Services.ApplicationCommands;
 using osu.NET;
 using osu.NET.Enums;
 using osu.NET.Models.Users;
-using PrettyLogSharp;
-using static PrettyLogSharp.PrettyLogger;
+using Serilog;
 
 namespace Ashfur.Modules.Games;
 
@@ -29,7 +28,7 @@ public class OsuModule(OsuApiClient osuApiClient) : ApplicationCommandModule<App
             //     await osuApiClient.GetScoreRankingsAsync(Ruleset.Osu, userExtendedApiResult.Value.CountryCode);
         }
         catch (Exception e) {
-            Log($"Could not fetch osu! data. {e}", LogType.Exception);
+            Log.Error($"Could not fetch osu! data. {e}");
             await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties {
                 Components = [ComponentUtils.BuildExceptionComponent("Could not fetch Osu data!", e)]
             }.WithFlags(MessageFlags.IsComponentsV2)));
