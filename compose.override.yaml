@@ -1,0 +1,20 @@
+﻿services:
+  ashfur:
+    build:
+      context: .
+      dockerfile: Ashfur/Dockerfile
+    volumes:
+      - ./Ashfur/bin/Debug/net10.0/appsettings.json:/app/appsettings.json
+      - ./Ashfur/bin/Debug/net10.0/logs:/app/logs
+
+  mongo:
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ashfur
+      MONGO_INITDB_ROOT_PASSWORD: furry
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

@@ -1,0 +1,15 @@
+﻿services:
+  ashfur:
+    image: ghcr.io/asoji/ashfur:latest
+    container_name: ashfur_bot
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    container_name: ashfur_mongo
+    restart: always
+
+networks:
+  default:
+    name: ashfur_network
