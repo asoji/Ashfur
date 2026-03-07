@@ -29,6 +29,7 @@ public class OsuModule(OsuApiClient osuApiClient) : ApplicationCommandModule<App
         }
         catch (Exception e) {
             Log.Error($"Could not fetch osu! data. {e}");
+            // SentrySdk.CaptureException(e);
             await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties {
                 Components = [ComponentUtils.BuildExceptionComponent("Could not fetch Osu data!", e)]
             }.WithFlags(MessageFlags.IsComponentsV2)));

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using NetCord;
@@ -11,12 +12,21 @@ using osu.NET.Authorization;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
-using Serilog.Formatting.Display;
 
 namespace Ashfur;
 
 internal class Program {
     static async Task Main(string[] args) {
+        HostApplicationBuilderSettings settings = new() {
+            Args = args,
+            Configuration = new ConfigurationManager(),
+            ContentRootPath = Directory.GetCurrentDirectory(),
+        };
+
+        settings.Configuration.AddEnvironmentVariables(prefix: "ASHFUR_");
+        
+        var builder = Host.CreateApplicationBuilder(settings);
+        
         String serilogOutputTemplate =
             "[{Timestamp:HH:mm:ss}] [{Level:u3}] [{AssemblyName}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
 
@@ -30,8 +40,7 @@ internal class Program {
                 // A Sentry Data Source Name (DSN) is required.
                 // See https://docs.sentry.io/product/sentry-basics/dsn-explainer/
                 // You can set it in the SENTRY_DSN environment variable, or you can set it in code here.
-                options.Dsn =
-                    "https://2af6737f46dc537c11428502f09c9f10@o4510992148267008.ingest.us.sentry.io/4510992207314944";
+                options.Dsn = "https://2af6737f46dc537c11428502f09c9f10@o4510992148267008.ingest.us.sentry.io/4510992207314944";
 
                 // When debug is enabled, the Sentry client will emit detailed debugging information to the console.
                 // This might be helpful, or might interfere with the normal operation of your application.
@@ -77,8 +86,6 @@ internal class Program {
             })
             .CreateLogger();
 
-        var builder = Host.CreateApplicationBuilder(args);
-
         builder.Services
             .AddSerilog()
             .AddDiscordGateway(options => {
@@ -88,12 +95,13 @@ internal class Program {
                         new UserActivityProperties("gay stuff 🏳️‍🌈", UserActivityType.Competing)
                     ]
                 };
+                options.Token = builder.Configuration["DISCORD_TOKEN"];
             })
             .AddGatewayHandlers(typeof(Program).Assembly)
             .AddApplicationCommands()
-            .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["Osu:ClientId"],
-                builder.Configuration["Osu:ClientSecret"]))
-            .AddSingleton<IMongoClient>(service => new MongoClient(builder.Configuration["MongoDb:ConnectionString"]));
+            .AddOsuApiClient(new OsuClientAccessTokenProvider(builder.Configuration["OSU_CLIENT_ID"],
+                builder.Configuration["OSU_CLIENT_SECRET"]))
+            .AddSingleton<IMongoClient>(_ => new MongoClient(builder.Configuration["MONGODB_CONNECTION_STRING"]));
 
         var host = builder.Build();
 
@@ -104,7 +112,6 @@ internal class Program {
             .GetDatabase("ashfur")
             .ListCollectionNamesAsync()).ToList();
         Log.Logger.Debug($"Found collections: {collections.Count}\n{String.Join("\n", collections)}");
-
 
         await host.RunAsync();
     }

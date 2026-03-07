@@ -2,6 +2,7 @@
   ashfur:
     image: ghcr.io/asoji/ashfur:latest
     container_name: ashfur_bot
+    env_file: .env
     depends_on:
       - mongo
 
