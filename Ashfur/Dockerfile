@@ -2,6 +2,16 @@
 USER $APP_UID
 WORKDIR /app
 
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS dev
+ARG BUILD_CONFIGURATION=Development
+ARG DOTNET_ENVIRONMENT=Development
+WORKDIR /src
+COPY ["Ashfur/Ashfur.csproj", "Ashfur/"]
+RUN dotnet restore "Ashfur/Ashfur.csproj"
+COPY . .
+WORKDIR "/src/Ashfur"
+ENTRYPOINT ["dotnet", "watch", "run"]
+
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src

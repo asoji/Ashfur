@@ -6,6 +6,7 @@ this will be cleaned up later because i could not care less rn [it's 05:47 as of
 
 ## General [not categorized for now]
 - Moderation commands
+- GitHub commands via OctoKit
 - Sending Sentry errors and feedback into a private channel
 - Figure out some stupid fun commands
 

@@ -3,8 +3,17 @@
     build:
       context: .
       dockerfile: Ashfur/Dockerfile
+      target: dev
+    develop:
+      watch:
+        - action: sync
+          path: ./Ashfur
+          target: /src/Ashfur
+          initial_sync: true
+          ignore:
+            - bin/
+            - obj/
     volumes:
-      - ./Ashfur/bin/Debug/net10.0/appsettings.json:/app/appsettings.json
       - ./Ashfur/bin/Debug/net10.0/logs:/app/logs
 
   mongo:
